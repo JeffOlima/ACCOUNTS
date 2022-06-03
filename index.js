@@ -40,8 +40,6 @@ function operation() {
        process.exit() 
 
     }
-
-
     }
 })
 .catch((err) => console.log(err))
