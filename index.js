@@ -18,7 +18,7 @@ function operation() {
         type: 'list',
         name: 'action',
         message: 'O que voce deseja fazer?',
-        choices :  ['Criar Conta','Consultar Saldo','Depositar','Sacar','Sair'],
+        choices :  ['Criar Conta','Consultar Saldo','Depositar','Sacar','Emprestimo','Sair'],
     },
 ])
 .then((answer) =>{
@@ -34,6 +34,9 @@ function operation() {
       getAccountBalance()  
     }else if(action === 'Sacar') {
         widthdraw()
+    
+    }else if(action === 'Emprestimo'){
+        loan()  
 
     }else if(action === 'Sair'){
        console.log(chalk.bgBlue.black('Obrigado por usar o Accounts!')) 
@@ -245,4 +248,33 @@ function removeAmount(accountName, amount){
       chalk.green(`Foi realizado um saque com de ${amount} da sua conta!`)
   )
   operation()
+}
+
+function loan(){
+    inquirer.prompt([
+        {
+           name: 'accountName',
+           message: 'Qual o nome da sua conta?',
+        },
+    ]).then((answer) =>{
+        const accountName = answer['accountName']
+        if(!checkAccount(accountName)){
+            return loan()
+        }
+        inquirer.prompt([
+            {
+            name: 'amount',
+            message: 'Quanto voce deseja emprestado?',    
+            },  
+        ]).then((answer) => {
+            const amount = answer['amount']
+
+            //add an amount
+            addAmount(accountName, amount)
+            operation()
+        })
+        .catch(err => console.log(err))
+        
+    })
+    .catch(err => console.log(err))    
 }
